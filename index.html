@@ -50,6 +50,10 @@
       font-size: 1.5rem;
       font-weight: bold;
     }
+    .subscript {
+      font-size: 0.8rem;
+      vertical-align: sub;
+    }
   </style>
 </head>
 <body>
@@ -57,7 +61,7 @@
   <div class="game-container">
     <h1>Fastly Growing Incremental</h1>
     <p>Your Increments: <span id="increments" class="currency">0</span></p>
-    <p>Current number (f_n): <span id="number">f_0</span></p>
+    <p>Current number: <span id="number">f<sub id="subscript">0</sub></span></p>
 
     <button id="increaseButton" class="button">Increase Number by 1</button>
     <br>
@@ -67,38 +71,43 @@
   </div>
 
   <script>
-    let increments = 0;
-    let number = 0;
-    let level = 0;
-    let incrementMultiplier = 1;
+    // Define the player object to hold the player's stats
+    const player = {
+      Increments: 0,      // Player's current Increments
+      number: 0,          // Player's current value of n
+      level: 0,           // Player's current level
+      incrementMultiplier: 1, // Increment multiplier for the player
+    };
 
     const incrementsDisplay = document.getElementById('increments');
     const numberDisplay = document.getElementById('number');
+    const subscriptDisplay = document.getElementById('subscript');
     const increaseButton = document.getElementById('increaseButton');
     const upgradeButton = document.getElementById('upgradeButton');
     const levelInfo = document.getElementById('levelInfo');
 
     // Function to update the UI
     function updateUI() {
-      incrementsDisplay.textContent = increments;
-      numberDisplay.textContent = `f_${number}`;
-      upgradeButton.disabled = increments < 15;
-      levelInfo.textContent = `Level ${level} - ${level === 0 ? '+1 Increment' : `+${incrementMultiplier} Increment`}`;
+      incrementsDisplay.textContent = player.Increments;
+      numberDisplay.textContent = `f`;
+      subscriptDisplay.textContent = player.number;  // Update subscript with the current value of `n`
+      upgradeButton.disabled = player.Increments < 15;
+      levelInfo.textContent = `Level ${player.level} - ${player.level === 0 ? '+1 Increment' : `+${player.incrementMultiplier} Increment`}`;
     }
 
     // Increase number function
     increaseButton.addEventListener('click', () => {
-      number += incrementMultiplier;
-      increments += 1;
+      player.number += player.incrementMultiplier;  // Increment `n` by the current multiplier
+      player.Increments += player.incrementMultiplier;  // Add increments based on the multiplier
       updateUI();
     });
 
     // Upgrade level function
     upgradeButton.addEventListener('click', () => {
-      if (increments >= 15) {
-        increments -= 15;
-        level += 1;
-        incrementMultiplier *= 2;
+      if (player.Increments >= 15) {
+        player.Increments -= 15;  // Spend 15 increments for the upgrade
+        player.level += 1;  // Increase level
+        player.incrementMultiplier *= 2;  // Double the increment multiplier
         updateUI();
       }
     });
