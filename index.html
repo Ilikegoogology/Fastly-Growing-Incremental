@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fastly Growing Incremental</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f3f3f3;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .game-container {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+    .button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 5px;
+      margin: 10px;
+    }
+    .button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+    .upgrade-button {
+      background-color: #007BFF;
+    }
+    .upgrade-button:disabled {
+      background-color: #ccc;
+    }
+    h1 {
+      margin: 0;
+    }
+    p {
+      font-size: 1.2rem;
+    }
+    .currency {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="game-container">
+    <h1>Fastly Growing Incremental</h1>
+    <p>Your Increments: <span id="increments" class="currency">0</span></p>
+    <p>Current number (f_n): <span id="number">f_0</span></p>
+
+    <button id="increaseButton" class="button">Increase Number by 1</button>
+    <br>
+    <button id="upgradeButton" class="button upgrade-button" disabled>Increase Level (15 Increments)</button>
+
+    <p id="levelInfo">Level 0 - +1 Increment</p>
+  </div>
+
+  <script>
+    let increments = 0;
+    let number = 0;
+    let level = 0;
+    let incrementMultiplier = 1;
+
+    const incrementsDisplay = document.getElementById('increments');
+    const numberDisplay = document.getElementById('number');
+    const increaseButton = document.getElementById('increaseButton');
+    const upgradeButton = document.getElementById('upgradeButton');
+    const levelInfo = document.getElementById('levelInfo');
+
+    // Function to update the UI
+    function updateUI() {
+      incrementsDisplay.textContent = increments;
+      numberDisplay.textContent = `f_${number}`;
+      upgradeButton.disabled = increments < 15;
+      levelInfo.textContent = `Level ${level} - ${level === 0 ? '+1 Increment' : `+${incrementMultiplier} Increment`}`;
+    }
+
+    // Increase number function
+    increaseButton.addEventListener('click', () => {
+      number += incrementMultiplier;
+      increments += 1;
+      updateUI();
+    });
+
+    // Upgrade level function
+    upgradeButton.addEventListener('click', () => {
+      if (increments >= 15) {
+        increments -= 15;
+        level += 1;
+        incrementMultiplier *= 2;
+        updateUI();
+      }
+    });
+
+    // Initial UI update
+    updateUI();
+  </script>
+
+</body>
+</html>
